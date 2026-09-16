@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<title>Glow Person | 案件デスク</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<aside class="sidebar">
+ <a class="brand" href="./" aria-label="Glow Person 案件デスク"><svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><rect x="1" y="1" width="34" height="34" rx="11" fill="currentColor"/><path d="M25 13a9 9 0 1 0 0 11v-6h-8v4h4" fill="none" stroke="white" stroke-width="3"/></svg><span>Glow Person<small>CAREER PARTNER WORKSPACE</small></span></a>
+ <div class="nav-label">WORKSPACE</div>
+ <nav aria-label="メインメニュー"><button id="nav-active" class="nav active">▦ <span>案件を探す</span><b id="nav-count">…</b></button><button id="nav-guide" class="nav">▧ <span>資料・運用ガイド</span></button></nav>
+ <div class="side-help"><span class="step-circle">↗</span><h3>選んで、整えて、届ける。</h3><p>案件の条件を確認したら、<br>学生に合わせた紹介文へ。</p><div>01 案件を選ぶ<br>02 紹介文を確認<br>03 コピー・LINE共有</div></div>
+ <div class="side-bottom"><span class="avatar">GP</span><span>Glow Person<small>社内用ワークスペース</small></span><span class="lock">●</span></div>
+</aside>
+<div class="shell">
+ <header class="topbar"><span>ワークスペース <span class="crumb">/</span> <b id="crumb">案件を探す</b></span><div><span class="internal">社内向け・公開リンク</span><button id="theme" title="配色を切り替え" aria-label="配色を切り替え">◐</button><a id="source-top" target="_blank" rel="noopener noreferrer">元シート ↗</a></div></header>
+ <main id="main">
+ <section class="heading"><div><div class="eyebrow">OPPORTUNITY DESK</div><h1 id="title">学生の次の一歩に、ぴったりの案件を。</h1><p id="subtitle">条件を確認しながら、伝わる紹介文をすばやく作成。</p></div><span class="date">最終同期 <b id="date">読み込み中</b><small>1時間ごとに自動更新</small></span></section>
+ <div class="sync-bar"><span id="sync-status" role="status" aria-live="polite">同期情報を確認中…</span><div><button id="sync-check" title="配置済みデータの更新を確認します。シートの即時同期ではありません。">更新を確認</button><button id="sync-load" hidden>最新データを読み込む</button></div></div>
+ <div id="error" role="alert" hidden></div>
+ <section id="workspace">
+ <div class="stats"><div><span>現行一覧の案件</span><b id="stat-active">—</b><small>すべて紹介前の許可確認が必要</small></div><div><span>27卒向け</span><b id="stat-27">—</b><small>卒業前の就活をサポート</small></div><div><span>28卒向け</span><b id="stat-28">—</b><small>これからのキャリア選びに</small></div></div>
+ <div class="notice"><span>ⓘ</span><p>学生へ送る前に、最新の受付状況と紹介許可を確認してください。<strong>紹介文には社内の成果条件を自動挿入しません。</strong></p></div>
+ <div class="toolbar"><label class="search"><span>⌕</span><input id="search" aria-label="案件を検索" placeholder="案件名・エリア・条件で検索"></label><select id="year" aria-label="卒年度"><option value="">すべての卒年度</option>27卒</option><option>28卒</option></select><select id="kind" aria-label="案件種別"><option value="">すべての種別</option>面談</option><option>登録</option></select><button id="reset" class="subtle">リセット</button></div>
+ <div class="result-heading"><h2 id="list-title">案件一覧 <span id="count"></span></h2><span>条件の空欄は「不問」ではなく「未記載」です</span></div>
+ <div class="work-grid"><section id="cards" aria-label="案件一覧"></section><aside class="composer" id="composer"><div class="composer-empty"><div class="empty-mark">↗</div><h2>伝わる紹介文を、ここで。</h2><p>案件の「紹介文を作る」を選ぶと、<br>学生向けの文章を編集できます。</p><ol><li>対象条件と紹介許可を確認</li><li>紹介文を学生に合わせて調整</li><li>コピーして送信、またはLINEへ</li></ol><small>社内情報と学生向け文章を分けて管理</small></div></aside></div>
+ </section>
+ <section id="guide" hidden></section>
+ </main>
+ <footer>Glow Person · Opportunity Desk <span>社内参照用 / 学生には紹介文のみを共有してください</span></footer>
+</div>
+<dialog id="detail"><div id="detail-content"></div><button id="detail-close">閉じる</button></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="./app.mjs"></script>
+</body></html>
