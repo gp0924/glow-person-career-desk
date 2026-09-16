@@ -1,12 +1,11 @@
 {
-  "importedAt": "2026-09-16T13:54:59.210Z",
-  "contentHash": "531376894c7b8b1c1a8cf570b66b0b030a819f1301ec09a15c59ed82455ae379",
+  "importedAt": "2026-09-16T14:06:28.117Z",
+  "contentHash": "d2cb5c2a9d078c02f2e06903099e44fbf7786ccd8cd5010a7846d293d38caf82",
   "sync": {
     "enabled": true,
     "intervalMinutes": 60,
     "provider": "Perplexity Computer"
   },
-  "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit",
   "sourceDate": "2026/7/4現在",
   "records": [
     {
@@ -34,8 +33,8 @@
       "summary": "東京・大阪での就職を検討し、IT・広告・人材などの選考に進みたい方に向けた就活相談です。紹介できる業界・職種は希望エリアや募集状況によって異なります。",
       "summaryNeedsReview": false,
       "kind": "面談",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A3:N3",
-      "row": 3
+      "row": 3,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-4",
@@ -61,8 +60,8 @@
       "summary": "希望する勤務地や就活の状況について相談できる面談案件です。対象条件と過去のサービス利用状況の確認が必要です。",
       "summaryNeedsReview": false,
       "kind": "面談",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A4:N4",
-      "row": 4
+      "row": 4,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-5",
@@ -86,8 +85,8 @@
       "summary": "27卒向けの面談案件です。詳しい支援内容・申込方法は、担当者に確認のうえご案内します。",
       "summaryNeedsReview": false,
       "kind": "面談",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A5:N5",
-      "row": 5
+      "row": 5,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-6",
@@ -113,8 +112,8 @@
       "summary": "関東・関西・東海・福岡にお住まい、または同エリアでの就職を希望する27卒の方に向けた面談案件です。",
       "summaryNeedsReview": false,
       "kind": "面談",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A6:N6",
-      "row": 6
+      "row": 6,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-7",
@@ -138,8 +137,8 @@
       "summary": "27卒向けの面談案件です。対象条件・支援内容・申込方法は現在確認が必要です。",
       "summaryNeedsReview": false,
       "kind": "面談",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A7:N7",
-      "row": 7
+      "row": 7,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-8",
@@ -163,8 +162,8 @@
       "summary": "27卒向けの面談案件です。対象条件・支援内容・申込方法は現在確認が必要です。",
       "summaryNeedsReview": false,
       "kind": "面談",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A8:N8",
-      "row": 8
+      "row": 8,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-9",
@@ -190,8 +189,8 @@
       "summary": "27卒向けのABABA登録のご案内です。最終選考まで進んだ経験がある方は、利用条件を確認のうえご相談ください。広告・人材・IT系のメガベンチャーのスカウトに関する案内があります。スカウトを保証するものではありません。",
       "summaryNeedsReview": false,
       "kind": "登録",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A9:N9",
-      "row": 9
+      "row": 9,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-10",
@@ -217,8 +216,8 @@
       "summary": "関東・関西での就職を希望する28卒の方に向けた面談案件です。サービス名にかかわらず、費用支援の内容や適用条件は申込前に担当者へご確認ください。",
       "summaryNeedsReview": false,
       "kind": "面談",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A10:N10",
-      "row": 10
+      "row": 10,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-11",
@@ -245,8 +244,8 @@
       "summary": "28卒向けの就活相談です。希望する職種に合わせて、総合職またはITエンジニア職の相談窓口を選べます。求人対応エリアは全国です。",
       "summaryNeedsReview": false,
       "kind": "面談",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A11:N11",
-      "row": 11
+      "row": 11,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-12",
@@ -270,8 +269,8 @@
       "summary": "東京・大阪での就職を希望する28卒の方に向けた面談案件です。対象条件や具体的な支援内容を確認してご案内します。",
       "summaryNeedsReview": false,
       "kind": "面談",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A12:N12",
-      "row": 12
+      "row": 12,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-13",
@@ -297,8 +296,8 @@
       "summary": "28卒向けの面談案件です。中小・ベンチャー企業を検討している方、企業規模にこだわらず就活を進めたい方が対象となります。希望エリアによって対象職種が異なります。",
       "summaryNeedsReview": false,
       "kind": "面談",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A13:N13",
-      "row": 13
+      "row": 13,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-14",
@@ -324,8 +323,8 @@
       "summary": "首都圏・関西圏での勤務を希望する28卒の方に向けた面談案件です。総合職・ビジネス職・コンサルタント職・マーケティング職などを希望する方が対象です。",
       "summaryNeedsReview": false,
       "kind": "面談",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A14:N14",
-      "row": 14
+      "row": 14,
+      "source": "管理元へのリンクは非公開"
     },
     {
       "id": "0-15",
@@ -351,14 +350,13 @@
       "summary": "外資就活の28卒向け会員登録のご案内です。対象大学などの利用条件がありますので、事前に担当者へご確認ください。",
       "summaryNeedsReview": false,
       "kind": "登録",
-      "source": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906&range=A15:N15",
-      "row": 15
+      "row": 15,
+      "source": "管理元へのリンクは非公開"
     }
   ],
   "sheets": [
     {
       "name": "面談案件レギュレーション",
-      "url": "https://docs.google.com/spreadsheets/d/1XRAVE9m8tEIgT8-7YMgcMXPtKN_nZY8nBGrKiB6VlsY/edit#gid=2091010906",
       "rows": [
         [
           "2026/7/4現在"
