@@ -1,6 +1,6 @@
 {
-  "importedAt": "2026-09-17T14:21:04.154Z",
-  "contentHash": "d2cb5c2a9d078c02f2e06903099e44fbf7786ccd8cd5010a7846d293d38caf82",
+  "importedAt": "2026-09-17T15:24:43.179Z",
+  "contentHash": "bce4eca7c13421cf7e7e2a84dfe1c07ded6f747534cf10346e5e9d19f40e7d94",
   "sync": {
     "enabled": true,
     "intervalMinutes": 60,
@@ -78,12 +78,14 @@
       "vocational": "不可",
       "area": "関東（広げても関西まで）",
       "conditions": "",
-      "linkNotes": "",
+      "linkNotes": "https://waaq.jp/p/onecareer/99gb0coiipo",
       "resources": "",
-      "links": [],
-      "headline": "就活相談のご案内",
-      "summary": "27卒向けの面談案件です。詳しい支援内容・申込方法は、担当者に確認のうえご案内します。",
-      "summaryNeedsReview": false,
+      "links": [
+        "https://waaq.jp/p/onecareer/99gb0coiipo"
+      ],
+      "headline": "最新条件を確認してご案内",
+      "summary": "27卒向けのワンキャリアのご案内です。対象条件・支援内容・申込方法を担当者に確認してご案内します。",
+      "summaryNeedsReview": true,
       "kind": "面談",
       "row": 5,
       "source": "管理元へのリンクは非公開"
@@ -416,7 +418,9 @@
           "不可",
           "不可",
           "不可",
-          "関東（広げても関西まで）"
+          "関東（広げても関西まで）",
+          "",
+          "https://waaq.jp/p/onecareer/99gb0coiipo"
         ],
         [
           "実施中\n許可制",
