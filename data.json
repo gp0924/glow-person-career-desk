@@ -1,6 +1,6 @@
 {
-  "importedAt": "2026-09-18T08:12:38.776Z",
-  "contentHash": "8460ae4b105329c5f70938fb83be0eac6685c83174bf63c93476951acff917c5",
+  "importedAt": "2026-09-18T09:21:14.626Z",
+  "contentHash": "19622fd35b8289fe6b1e95044f374e5b227268f852b1dad7df8d76430c44ee41",
   "sync": {
     "enabled": true,
     "intervalMinutes": 60,
@@ -307,6 +307,56 @@
     },
     {
       "id": "0-15",
+      "name": "ジョブコミ",
+      "year": "28卒",
+      "status": "実施中\n許可制",
+      "current": true,
+      "conflict": false,
+      "education": "",
+      "graduate": "",
+      "science": "",
+      "nationality": "",
+      "junior": "",
+      "vocational": "",
+      "area": "",
+      "conditions": "",
+      "linkNotes": "",
+      "resources": "",
+      "links": [],
+      "headline": "最新条件を確認してご案内",
+      "summary": "28卒向けのジョブコミのご案内です。対象条件・支援内容・申込方法を担当者に確認してご案内します。",
+      "summaryNeedsReview": true,
+      "kind": "面談",
+      "row": 15,
+      "source": "管理元へのリンクは非公開"
+    },
+    {
+      "id": "0-16",
+      "name": "キャリアスタート",
+      "year": "28卒",
+      "status": "実施中\n許可制",
+      "current": true,
+      "conflict": false,
+      "education": "",
+      "graduate": "",
+      "science": "",
+      "nationality": "",
+      "junior": "",
+      "vocational": "",
+      "area": "",
+      "conditions": "",
+      "linkNotes": "",
+      "resources": "",
+      "links": [],
+      "headline": "最新条件を確認してご案内",
+      "summary": "28卒向けのキャリアスタートのご案内です。対象条件・支援内容・申込方法を担当者に確認してご案内します。",
+      "summaryNeedsReview": true,
+      "kind": "面談",
+      "row": 16,
+      "source": "管理元へのリンクは非公開"
+    },
+    {
+      "id": "0-17",
       "name": "外資就活",
       "year": "28卒",
       "status": "実施中\n許可制",
@@ -329,7 +379,7 @@
       "summary": "外資就活の28卒向け会員登録のご案内です。対象大学などの利用条件がありますので、事前に担当者へご確認ください。",
       "summaryNeedsReview": false,
       "kind": "登録",
-      "row": 15,
+      "row": 17,
       "source": "管理元へのリンクは非公開"
     }
   ],
@@ -512,6 +562,16 @@
           "理系職、エンジニア職、デザイナー職など限定的な専門職ではなく、\n総合職、ビジネス職、コンサルタント職、マーケティング職などのいわゆる文系職種希望であること",
           "https://mendanyoyaku.eeasy.jp/lepont",
           "https://docs.google.com/document/d/1CC-6CH5JiaygoKIfEqjss_SYRAooZ-q_yI8GtFeKU1w/edit?usp=sharing\n\n＜サービス特徴資料＞\nhttps://docs.google.com/presentation/d/130qXS27Dp3jcWneTH5iyjYhfxqw049T9b0AFi6Sr-SY/edit?usp=sharing\n\nSanSan、ビジョナル、タイミー、レバレジーズなどもございます。"
+        ],
+        [
+          "実施中\n許可制",
+          "ジョブコミ",
+          "28卒"
+        ],
+        [
+          "実施中\n許可制",
+          "キャリアスタート",
+          "28卒"
         ],
         [
           "実施中\n許可制",
