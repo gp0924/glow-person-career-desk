@@ -1,7 +1,9 @@
-import {draft,lineURL,isShareable} from './message.mjs';
+import {draft,lineURL,isShareable,shareBlockReason,getSyncBlockReason} from './message.mjs';
 import {startSync} from './sync-monitor.mjs';
 const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let data,view='active',selected=null;
+let updateSharing=()=>{};
+document.addEventListener('sync-state',()=>updateSharing());
 const toast=t=>{$('#toast').textContent=t;$('#toast').classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3500)};
 document.documentElement.dataset.theme=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
 $('#theme').onclick=()=>document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';
@@ -28,14 +30,43 @@ function select(r){
  $('#composer').innerHTML=`<div class="composer-head"><div><span class="eyebrow">MESSAGE STUDIO</span><h2>学生向け紹介文</h2></div><span class="draft-badge">下書き</span></div><div class="chosen"><span>${r.year} / ${r.kind}</span><b>${esc(r.name)}</b></div><div class="composer-body"><label>文章の長さ<select id="format"><option value="standard">標準 · 条件も簡潔に</option><option value="short">短め · LINEで読みやすく</option></select></label><label>冒頭のひとこと <small>任意</small><input id="intro" placeholder="こんにちは！就活サービスのご案内です。"></label><label>申込リンク<select id="link"><option value="">リンクを載せない（担当者へ相談）</option>${r.links.map((l,i)=>`<option value="${esc(l)}">${labels[i]||`申込先 ${i+1}`} · ${new URL(l).hostname}</option>`).join('')}</select></label><p class="hint">${r.links.length?'専用リンク・職種別の窓口を確認してから選択してください。':'現行行に申込URLがありません。別年度や停止案件のURLは流用しません。'}</p><label>締めのひとこと <small>任意</small><input id="closing" placeholder="気になったら、気軽に返信してください！"></label><button id="regenerate" class="subtle regenerate">設定から文章を作り直す ↻</button><div class="preview-label"><label for="message">送信する文章 <small>直接編集できます</small></label><span id="length"></span></div><textarea id="message" spellcheck="false"></textarea><p class="hint">成果条件・否認条件・管理者用URLは自動挿入しません。編集内容は再読み込みで消えます。</p>${r.conflict?'<p class="warning">現行・停止一覧で状態が重複しています。紹介可否を担当者に確認してください。</p>':''}<label class="review"><input type="checkbox" id="review"><span>最新の受付状況・紹介許可・学生の対象条件・リンク・本文を確認しました</span></label><div class="share-actions"><button id="copy">文章をコピー</button><button id="line" class="line">LINEで共有 ↗</button><button id="other" class="subtle">その他のアプリで共有</button></div><p class="hint">LINEはスマホアプリ向け。PCではコピーをご利用ください。送信先の選択・送信はご自身で行います。</p></div>`;
  if(r.summaryNeedsReview)$('#composer .chosen').insertAdjacentHTML('beforeend','<p class="warning">新規または条件変更あり。古い紹介文を使わず、確認用の簡潔な文章に切り替えています。</p>');
  function refreshDraft(){const t=draft(r,{format:$('#format').value,intro:$('#intro').value,closing:$('#closing').value,link:$('#link').value});$('#message').value=t;$('#message').dataset.generated=t;$('#review').checked=false;update();}
- function update(){const text=$('#message').value;$('#length').textContent=`${text.length.toLocaleString()} / 4,000字`;const ok=isShareable(r,$('#review').checked,text);['copy','line','other'].forEach(id=>$('#'+id).disabled=!ok);$('#length').classList.toggle('over',text.length>4000);}
+ $('#composer .share-actions').insertAdjacentHTML('beforebegin','<p id="share-status" class="hint" role="status" aria-live="polite"></p><button id="share-recheck" class="subtle" hidden>配信済みデータを再確認</button><p id="copy-result" class="hint" role="status" aria-live="polite" hidden></p>');
+ ['copy','line','other','review'].forEach(id=>$('#'+id).setAttribute('aria-describedby','share-status'));
+ $('#share-recheck').onclick=()=>{if(!$('#sync-load').hidden)$('#sync-load').click();else $('#sync-check').click()};
+ function update(){
+  const text=$('#message').value,syncReason=getSyncBlockReason(),review=$('#review');
+  if(syncReason){review.checked=false;$('#copy-result').hidden=true;}
+  review.disabled=Boolean(syncReason);
+  const reason=shareBlockReason(r,review.checked,text);
+  $('#length').textContent=`${text.length.toLocaleString()} / 4,000字`;
+  ['copy','line','other'].forEach(id=>$('#'+id).disabled=Boolean(reason));
+  $('#length').classList.toggle('over',text.length>4000);
+  $('#share-status').textContent=reason||'コピー・共有できます。送信先と内容を最後にご確認ください。';
+  $('#share-status').className=syncReason?'warning':'hint';
+  $('#share-recheck').hidden=!syncReason;
+  $('#share-recheck').textContent=$('#sync-load').hidden?'配信済みデータを再確認（シート同期ではありません）':'最新データを読み込む';
+ }
+ updateSharing=update;
+ function guard(){update();return isShareable(r,$('#review').checked,$('#message').value)}
  $('#regenerate').onclick=()=>{if($('#message').value!==$('#message').dataset.generated&&!confirm('手動編集を破棄し、設定から文章を作り直しますか？'))return;refreshDraft()};
  ['format','intro','closing','link'].forEach(id=>$('#'+id).addEventListener('change',()=>{if($('#message').value===$('#message').dataset.generated)refreshDraft();else{$('#review').checked=false;update();toast('設定を反映するには「文章を作り直す」を押してください');}}));
- $('#message').oninput=()=>{$('#review').checked=false;update()};
+ $('#message').oninput=()=>{$('#review').checked=false;$('#copy-result').hidden=true;update()};
  $('#review').onchange=update;
- $('#copy').onclick=async()=>{try{await navigator.clipboard.writeText($('#message').value);toast('紹介文をコピーしました');}catch{$('#message').focus();$('#message').select();try{if(document.execCommand('copy')){toast('紹介文をコピーしました');return}}catch{}toast('文章を選択しました。手動でコピーしてください');}};
- $('#line').onclick=()=>{window.open(lineURL($('#message').value),'_blank','noopener,noreferrer')};
- $('#other').onclick=async()=>{if(!navigator.share){toast('この環境では共有メニューを使えません。コピーをご利用ください。');return}try{await navigator.share({title:`${r.name} ${r.year}`,text:$('#message').value})}catch(e){if(e.name!=='AbortError')toast('共有できませんでした。コピーをご利用ください。')}};
+ $('#copy').onclick=async()=>{
+  if(!guard())return;
+  const message=$('#message'),result=$('#copy-result'),text=message.value;
+  const done=()=>{result.hidden=false;result.textContent='紹介文をコピーしました。送信先に貼り付けて内容をご確認ください。';toast('紹介文をコピーしました')};
+  try{await navigator.clipboard.writeText(text);done()}
+  catch{
+   if(!message.isConnected||message!==$('#message')||message.value!==text||!guard())return;
+   message.focus();message.select();message.setSelectionRange(0,text.length);
+   try{if(document.execCommand('copy')){done();return}}catch{}
+   result.hidden=false;result.textContent='ブラウザが自動コピーを許可しませんでした。文章を全選択しています。Windowsは Ctrl+C、Macは ⌘C、スマホは選択メニューの「コピー」を使ってください。';
+   toast('自動コピーできませんでした。選択した文章を手動でコピーしてください');
+  }
+ };
+ $('#line').onclick=()=>{if(guard())window.open(lineURL($('#message').value),'_blank','noopener,noreferrer')};
+ $('#other').onclick=async()=>{if(!guard())return;if(!navigator.share){toast('この環境では共有メニューを使えません。コピーをご利用ください。');return}try{await navigator.share({title:`${r.name} ${r.year}`,text:$('#message').value})}catch(e){if(e.name!=='AbortError')toast('共有できませんでした。コピーをご利用ください。')}};
  refreshDraft();
  if(innerWidth<1100)$('#composer').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -63,7 +94,7 @@ async function init(){try{
  const guideData=$('#guide .guide-grid article p');
  $('#guide .guide-grid article:nth-child(2)>p').textContent='実施中案件の原文のみ参照できます。停止・要確認案件と停止案件を含む過去の参考データは、公開側の配信データから除外しています。元のGoogleシートは変更していません。';
  $('#guide .guide-grid article').querySelectorAll('p')[2].textContent='このアプリは所有者の指定により公開リンクで提供しています。リンクを知っている人は、社内条件・成果条件・専用申込URLを含む取得済みデータを閲覧できます。今後の同期内容も同じ公開範囲になります。元のGoogleシートやリンク先資料へのアクセス権は別管理です。閲覧者を制限したい場合は、所有者がPerplexityの共有設定を変更してください。GitHubリポジトリは非公開のままです。';
- guideData.textContent='1時間ごとに元シートを読み取り、実施中の案件だけを非公開GitHubとこのアプリへ反映します。停止・要確認案件は毎回除外します。ページを開いている間は1分ごとに配置済みデータの更新を確認します。「更新を確認」はシートへの即時同期ではありません。変更時は再読み込みを案内し、編集中の文章は勝手に上書きしません。3時間以上同期されない場合は共有を停止します。元シートは変更しません。現行と停止の両方にある案件は、現行の実施中行だけを残して要確認の警告を表示します。';
+ guideData.textContent='元シートの同期は管理者側で実行します。定期実行の稼働状況はこのページでは確認できません。実施中の案件だけを反映し、停止・要確認案件は毎回除外します。ページは1分ごとに配信済みデータを確認しますが、「更新を確認」は元シートを同期する操作ではありません。新しい条件がある場合は再読み込みが必要です。3時間以上同期されない場合はコピー・共有を停止するため、管理者へ同期を依頼してください。編集中の文章は勝手に上書きしません。元シートは変更しません。現行と停止の両方にある案件には紹介可否の確認を促す警告を表示します。';
  render();startSync(data);
 }catch(e){$('#error').hidden=false;$('#error').innerHTML='<h2>案件データを読み込めませんでした</h2><p>接続を確認して、ページを再読み込みしてください。</p>';$('#workspace').hidden=true;console.error(e)}}
 function column(n){let s='';for(n++;n;n=Math.floor((n-1)/26))s=String.fromCharCode(65+(n-1)%26)+s;return s}
