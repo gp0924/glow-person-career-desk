@@ -1,9 +1,10 @@
-import {draft,lineURL,isShareable,shareBlockReason,getSyncBlockReason} from './message.mjs';
+import {draft,lineURL,isShareable,shareBlockReason,getSyncBlockReason,detailFields,detailText,detailCopyBlockReason} from './message.mjs';
 import {startSync} from './sync-monitor.mjs';
 const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let data,view='active',selected=null;
 let updateSharing=()=>{};
-document.addEventListener('sync-state',()=>updateSharing());
+let updateDetailSharing=()=>{};
+document.addEventListener('sync-state',()=>{updateSharing();updateDetailSharing()});
 const toast=t=>{$('#toast').textContent=t;$('#toast').classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3500)};
 document.documentElement.dataset.theme=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
 $('#theme').onclick=()=>document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';
@@ -17,8 +18,35 @@ function render(){
  if($('#empty-reset'))$('#empty-reset').onclick=reset;
 }
 function detail(r){
- const fields=[['原文ステータス',r.status],['学歴',r.education],['院生',r.graduate],['理系',r.science],['海外国籍',r.nationality],['短大',r.junior],['専門',r.vocational],['求人対応エリア',r.area],['その他セグメント（社内用）',r.conditions],['申込欄の原文（社内用）',r.linkNotes],['サービス資料・原文',r.resources]];
- $('#detail-content').innerHTML=`<span class="eyebrow">INTERNAL REFERENCE</span><h2>${esc(r.name)} · ${r.year}</h2><p class="warning">社内確認用です。この原文をそのまま学生へ転送しないでください。${r.conflict?'現行と停止の両一覧に掲載されています。担当者へ状況をご確認ください。':''}</p><dl class="detail-fields">${fields.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v||'未記載・要確認')}</dd></div>`).join('')}</dl>`;
+ const fields=detailFields(r),extra=[['原文ステータス',r.status],['申込欄の原文（社内用）',r.linkNotes],['サービス資料・原文',r.resources]];
+ $('#detail-content').innerHTML=`<span class="eyebrow">INTERNAL REFERENCE</span><h2>${esc(r.name)} · ${r.year}</h2><p class="warning">社内確認用です。この原文をそのまま学生へ転送しないでください。${r.conflict?'現行と停止の両一覧に掲載されています。担当者へ状況をご確認ください。':''}</p><section class="detail-copy-panel" aria-label="条件のコピー"><button id="detail-copy-all" aria-describedby="detail-copy-status">8項目をまとめてコピー</button><p class="hint">項目名と内容を省略せずコピーします。空欄は「未記載・要確認」と表示します。</p><label for="detail-copy-text">コピーする内容（社内確認用）</label><textarea id="detail-copy-text" readonly spellcheck="false"></textarea><p id="detail-copy-status" class="hint" role="status" aria-live="polite"></p></section><dl class="detail-fields">${fields.map(([k,v],i)=>`<div><dt>${esc(k)}<button class="detail-copy-one subtle" data-field="${i}" aria-label="${esc(k)}をコピー" aria-describedby="detail-copy-status">この項目をコピー</button></dt><dd>${esc(v)}</dd></div>`).join('')}${extra.map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v||'未記載・要確認')}</dd></div>`).join('')}</dl>`;
+ const textArea=$('#detail-copy-text'),status=$('#detail-copy-status');
+ textArea.value=detailText(r);
+ function updateDetail(){
+  if(!textArea.isConnected)return;
+  const reason=detailCopyBlockReason(r);
+  $('#detail-copy-all').disabled=Boolean(reason);
+  document.querySelectorAll('.detail-copy-one').forEach(b=>b.disabled=Boolean(reason));
+  status.className=reason?'warning':'hint';
+  if(reason){status.textContent=reason;status.dataset.blocked='true';}
+  else if(status.dataset.blocked==='true'||!status.textContent){status.textContent='まとめて、または項目ごとにコピーできます。';delete status.dataset.blocked;}
+ }
+ updateDetailSharing=updateDetail;
+ async function copyDetails(index=null){
+  updateDetail();if(detailCopyBlockReason(r))return;
+  const text=detailText(r,index);textArea.value=text;
+  const done=()=>{if(textArea.isConnected){status.textContent=index===null?'8項目をコピーしました。社内確認用として貼り付けてください。':`${fields[index][0]}をコピーしました。`;toast('詳細をコピーしました');}};
+  try{await navigator.clipboard.writeText(text);done();}
+  catch{
+   if(!textArea.isConnected||textArea.value!==text||detailCopyBlockReason(r)){updateDetail();return;}
+   textArea.focus();textArea.select();textArea.setSelectionRange(0,text.length);
+   try{if(document.execCommand('copy')){done();return;}}catch{}
+   status.textContent='自動コピーできませんでした。全文を選択しています。Windowsは Ctrl+C、Macは ⌘C、スマホは選択メニューの「コピー」を使ってください。';
+  }
+ }
+ $('#detail-copy-all').onclick=()=>copyDetails();
+ document.querySelectorAll('.detail-copy-one').forEach(b=>b.onclick=()=>copyDetails(Number(b.dataset.field)));
+ updateDetail();
  $('#detail').showModal();
 }
 $('#detail-close').onclick=()=>$('#detail').close();
@@ -28,8 +56,17 @@ function select(r){
  selected=r;render();
  const labels=r.name==='irodas'?['総合職','ITエンジニア職']:r.links.map((_,i)=>`申込先 ${i+1}`);
  $('#composer').innerHTML=`<div class="composer-head"><div><span class="eyebrow">MESSAGE STUDIO</span><h2>学生向け紹介文</h2></div><span class="draft-badge">下書き</span></div><div class="chosen"><span>${r.year} / ${r.kind}</span><b>${esc(r.name)}</b></div><div class="composer-body"><label>文章の長さ<select id="format"><option value="standard">標準 · 条件も簡潔に</option><option value="short">短め · LINEで読みやすく</option></select></label><label>冒頭のひとこと <small>任意</small><input id="intro" placeholder="こんにちは！就活サービスのご案内です。"></label><label>申込リンク<select id="link"><option value="">リンクを載せない（担当者へ相談）</option>${r.links.map((l,i)=>`<option value="${esc(l)}">${labels[i]||`申込先 ${i+1}`} · ${new URL(l).hostname}</option>`).join('')}</select></label><p class="hint">${r.links.length?'専用リンク・職種別の窓口を確認してから選択してください。':'現行行に申込URLがありません。別年度や停止案件のURLは流用しません。'}</p><label>締めのひとこと <small>任意</small><input id="closing" placeholder="気になったら、気軽に返信してください！"></label><button id="regenerate" class="subtle regenerate">設定から文章を作り直す ↻</button><div class="preview-label"><label for="message">送信する文章 <small>直接編集できます</small></label><span id="length"></span></div><textarea id="message" spellcheck="false"></textarea><p class="hint">成果条件・否認条件・管理者用URLは自動挿入しません。編集内容は再読み込みで消えます。</p>${r.conflict?'<p class="warning">現行・停止一覧で状態が重複しています。紹介可否を担当者に確認してください。</p>':''}<label class="review"><input type="checkbox" id="review"><span>最新の受付状況・紹介許可・学生の対象条件・リンク・本文を確認しました</span></label><div class="share-actions"><button id="copy">文章をコピー</button><button id="line" class="line">LINEで共有 ↗</button><button id="other" class="subtle">その他のアプリで共有</button></div><p class="hint">LINEはスマホアプリ向け。PCではコピーをご利用ください。送信先の選択・送信はご自身で行います。</p></div>`;
- if(r.summaryNeedsReview)$('#composer .chosen').insertAdjacentHTML('beforeend','<p class="warning">新規または条件変更あり。古い紹介文を使わず、確認用の簡潔な文章に切り替えています。</p>');
- function refreshDraft(){const t=draft(r,{format:$('#format').value,intro:$('#intro').value,closing:$('#closing').value,link:$('#link').value});$('#message').value=t;$('#message').dataset.generated=t;$('#review').checked=false;update();}
+ $('#composer .composer-head h2').textContent='案件紹介文';
+ $('#format').parentElement.firstChild.textContent='文章の構成';
+ $('#format').insertAdjacentHTML('afterbegin','<option value="full">全8項目 · 詳細を含む（初期設定）</option>');
+ $('#format').querySelector('[value="standard"]').textContent='学生向け · 標準の簡潔版';
+ $('#format').querySelector('[value="short"]').textContent='学生向け · 短い案内版';
+ $('#format').value='full';
+ $('#message').previousElementSibling.querySelector('label').firstChild.textContent='コピーする文章 ';
+ $('#message').insertAdjacentHTML('afterend','<p class="warning">初期設定の全8項目版は、その他セグメントの原文（社内向けの否認条件など）も含みます。学生へ送る前に不要な社内表現を削除してください。学生向け簡潔版への切り替えもできます。</p>');
+ $('#message').nextElementSibling.nextElementSibling.textContent='申込リンクは選択した場合だけ挿入します。編集内容は再読み込みで消えます。';
+ if(r.summaryNeedsReview)$('#composer .chosen').insertAdjacentHTML('beforeend','<p class="warning">新規または条件変更あり。概要は確認用の簡潔な文章です。下の詳細条件も含め、原文を確認してください。</p>');
+ function refreshDraft(){const t=draft(r,{format:$('#format').value,intro:$('#intro').value,closing:$('#closing').value,link:$('#link').value});$('#message').value=t;$('#message').dataset.generated=t;$('#review').checked=false;$('#copy-result').hidden=true;update();}
  $('#composer .share-actions').insertAdjacentHTML('beforebegin','<p id="share-status" class="hint" role="status" aria-live="polite"></p><button id="share-recheck" class="subtle" hidden>配信済みデータを再確認</button><p id="copy-result" class="hint" role="status" aria-live="polite" hidden></p>');
  ['copy','line','other','review'].forEach(id=>$('#'+id).setAttribute('aria-describedby','share-status'));
  $('#share-recheck').onclick=()=>{if(!$('#sync-load').hidden)$('#sync-load').click();else $('#sync-check').click()};
